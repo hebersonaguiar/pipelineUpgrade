@@ -8,9 +8,10 @@ node('slave') {
 }
 
 node('slave') {
-    stage('Container Runing') {
+    stage('Editing Compose Jboss') {
         sh "git clone https://github.com/hebersonaguiar/composes.git /srv/composesGit"
+        sh "/srv/composesGit/cat docker-compose-jboss.yml | grep image | awk -F: '{print \$3}' > /tmp/tagJboss"
+        sh "newTag=\$( cat /tmp/tagJboss ); sed -e 's/'"${newTag}"'/8.2.3.Final/g' /srv/composesGit/docker-compose-jboss.yml" 
         sh "cat /srv/composesGit/docker-compose-jboss.yml"
-        sh "rm -rf /srv/composesGit" 
     }
 }
