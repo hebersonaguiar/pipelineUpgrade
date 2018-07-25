@@ -10,11 +10,9 @@ node('slave') {
 node('slave') {
     stage('Editing Compose Jboss') {
         sh "rm -rf /tmp/tagJboss"
-        sh "cp -R /srv/compose/ /srv/composeBKP"
         sh "cat /srv/compose/docker-compose-jboss.yml | grep image | awk -F: '{print \$3}' > /tmp/tagJboss"
         sh "sed -i 's/'\$(cat /tmp/tagJboss)'/${params.Tag}/g' /srv/compose/docker-compose-jboss.yml" 
         sh "cat /srv/compose/docker-compose-jboss.yml"
-        sh "rm -rf /srv/composeBKP"
     }
 }
 
