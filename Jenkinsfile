@@ -9,10 +9,11 @@ node('slave') {
 
 node('slave') {
     stage('Editing Compose Jboss') {
-        checkout scm
+        sh "rm -rf /tmp/tagJboss"
+        sh "rm -rf /srv/composesGit"
         sh "git clone https://github.com/hebersonaguiar/composes.git /srv/composesGit"
         sh "cat /srv/composesGit/docker-compose-jboss.yml | grep image | awk -F: '{print \$3}' > /tmp/tagJboss"
-        sh script: "export newTagJb=\$( cat /tmp/tagJboss ); sed -e 's/'\\\"${newTagJb}\\\"'/8.2.3.Final/g' /srv/composesGit/docker-compose-jboss.yml" 
+        sh "export sed -e 's/'\\\"\$( cat /tmp/tagJboss )\\\"'/8.2.3.Final/g' /srv/composesGit/docker-compose-jboss.yml" 
         sh "cat /srv/composesGit/docker-compose-jboss.yml"
         sh "rm -rf /tmp/tagJboss"
         sh "rm -rf /srv/composesGit"
