@@ -12,7 +12,9 @@ node('slave') {
         checkout scm
         sh "git clone https://github.com/hebersonaguiar/composes.git /srv/composesGit"
         sh "cat /srv/composesGit/docker-compose-jboss.yml | grep image | awk -F: '{print \$3}' > /tmp/tagJboss"
-        sh "newTag=\$( cat /tmp/tagJboss ); sed -e 's/'\\\"${newTag}\\\"'/8.2.3.Final/g' /srv/composesGit/docker-compose-jboss.yml" 
+        sh script: "export newTagJb=\$( cat /tmp/tagJboss ); sed -e 's/'\\\"${newTagJb}\\\"'/8.2.3.Final/g' /srv/composesGit/docker-compose-jboss.yml" 
         sh "cat /srv/composesGit/docker-compose-jboss.yml"
+        sh "rm -rf /tmp/tagJboss"
+        sh "rm -rf /srv/composesGit"
     }
 }
